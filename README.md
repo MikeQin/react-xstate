@@ -1,3 +1,12 @@
+# React xState
+
+- XState: https://xstate.js.org/docs-v3/#/
+- XState Visualizer: https://statecharts.github.io/xstate-viz/
+
+```
+npm i xstate @xstate/react
+```
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
