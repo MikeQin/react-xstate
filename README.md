@@ -3,9 +3,26 @@
 - XState: https://xstate.js.org/docs-v3/#/
 - XState Visualizer: https://statecharts.github.io/xstate-viz/
 
+### Install xState
 ```
-npm i xstate @xstate/react
+npm install xstate @xstate/react
 ```
+
+### Install Blueprint UI
+```
+npm install @blueprintjs/core
+npm update core-js
+npm update
+```
+
+### Update App.css
+```
+@import "~normalize.css";
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+```
+
+----
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

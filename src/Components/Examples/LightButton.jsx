@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useMachine } from "@xstate/react";
-import { Machine } from "xstate";
+import React, { useEffect } from "./node_modules/react";
+import { useMachine } from "./node_modules/@xstate/react";
+import { Machine } from "./node_modules/xstate";
 
 const lightMachine = Machine({
   key: "light",

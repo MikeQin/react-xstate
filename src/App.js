@@ -1,17 +1,11 @@
 import React from 'react';
 import './App.css';
-import { TogglerButton } from './components/TogglerButton';
-import { PromiseButton } from './components/PromiseButton';
-import { LightButton } from './components/LightButton';
-import { NestedFSMachine } from './components/NestedFSMachine';
+import PaymentForm from './Components/PaymentForm';
 
 function App() {
   return (
-    <div className="button">
-      <TogglerButton />
-      <PromiseButton />
-      <LightButton />
-      <NestedFSMachine />
+    <div className="App">
+      <PaymentForm />
     </div>
   );
 }
