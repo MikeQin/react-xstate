@@ -3,7 +3,7 @@ import { FormGroup, InputGroup, Button, Intent } from "@blueprintjs/core";
 import { useMachine } from "@xstate/react";
 import { Machine, assign } from "xstate";
 
-const stateMachine = Machine({
+const machine = Machine({
   id: "paymentForm",
   context: {
     message: ''
@@ -61,31 +61,32 @@ function paymentGateway() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       if (Math.random() > 0.6) {
-        resolve('Payment was received at Payment Gateway');
+        resolve('Payment was RECEIVED at Payment Gateway');
       }
       else {
-        reject('Payment was rejected at Payment Gateway');
+        reject('Payment was REJECTED! Try again...');
       }
     }, 3000);
   });
 };
 
 const PaymentForm = () => {
-  const [currentState, send] = useMachine(stateMachine);
+  const [state, send] = useMachine(machine);
   const [form, setForm] = useState({
     name: '',
     card: ''
   });
 
   useEffect(() => {
-    console.log("[*] state.value:", currentState.value);
-  }, [currentState]);
+    console.log("[* PAYMENT.form] ", form);
+    console.log("[* PAYMENT.state] ", state.value);
+  }, [state, form]);
 
   // DO NOT NEED to USE 'service' for react
   /******************************************/
   // Method passed is executed during rendering
   // const service = useMemo(() => {
-  //   const theService = interpret(stateMachine).onTransition(
+  //   const theService = interpret(Machine).onTransition(
   //     state => {
   //       if (state.changed) { // notified state change
   //         console.log(state.value);
@@ -122,7 +123,7 @@ const PaymentForm = () => {
   }
 
   return (
-    <div style={{ marginLeft: '150px', marginRight: '150px', marginTop: '50px', marginBottom: '50px' }}>
+    <div style={{ marginLeft: '150px', marginRight: '150px', marginTop: '0px', marginBottom: '50px' }}>
       <form onSubmit={handleSubmit} >
         <h1 className="bp3-heading">Payment Form</h1>
         <p >(xState)</p>
@@ -161,28 +162,28 @@ const PaymentForm = () => {
           />
 
         </FormGroup>
+        <br />
         <FormGroup>
           <Button
             type="submit"
             intent={Intent.PRIMARY}
+            large={true}
           >
-            Submit
+            Submit Payment
         </Button>
         </FormGroup>
       </form>
       <br />
-      {currentState.matches('failure') ?
-        (
-          <p style={{ color: '#C23030' }}>
-            {currentState.context.message ? currentState.context.message : ''}
-          </p>
-        )
+      {state.matches('failure') ?
+        <p style={{ color: '#C23030' }}>
+          {state.context.message ? state.context.message : ''}
+        </p>
         :
         <p style={{ color: '#15B371' }}>
-          {currentState.context.message ? currentState.context.message : ''}
+          {state.context.message ? state.context.message : ''}
         </p>
       }
-
+      <p>FSM: {state.matches('success') ? 'SUCCESS' : state.value.toUpperCase()}</p>
     </div>
   );
 }
