@@ -1,4 +1,4 @@
-# React xState
+# React xState with Blueprint 3 (UI)
 
 - XState: https://xstate.js.org/docs-v3/#/
 - XState Visualizer: https://statecharts.github.io/xstate-viz/
