@@ -183,7 +183,8 @@ const PaymentForm = () => {
           {state.context.message ? state.context.message : ''}
         </p>
       }
-      <p>FSM: {state.matches('success') ? 'SUCCESS' : state.value.toUpperCase()}</p>
+      <p>finite state machine's state: {state.matches('success') ? 'SUCCESS' : state.value.toUpperCase()}</p>
+      <p>payment: [ {form.name}, {form.card} ]</p>
     </div>
   );
 }

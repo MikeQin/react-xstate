@@ -138,29 +138,24 @@ const MakeCoffee = () => {
             }
           />
         </FormGroup>
-        <FormGroup label="Flavor" labelFor="flavor" labelInfo="(required)"
-          inline={false}
+        <select id="flavor" className="bp3-select bp3-large"
+          onChange={e => (setForm(prev => ({ ...prev, flavor: e.target.value })))}
+          value={form.flavor} style={{ marginTop: '15px', height: '7vh' }}>
+          <option value="" selected>Choose a flavor...</option>
+          <option value="French Vanilla">French Vanilla</option>
+          <option value="Caramel Macchiato">Caramel Macchiato</option>
+          <option value="Pumpkin Spice">Pumpkin Spice</option>
+          <option value="Mocha">Mocha</option>
+          <option value="Hazelnut">Hazelnut</option>
+        </select>
+        <br /><br /><br />
+        <Button
+          type="submit"
           intent={Intent.PRIMARY}
+          large={true}
         >
-          <InputGroup
-            id="flavor"
-            placeholder="Flavor..."
-            value={form.flavor}
-            onChange={
-              e => (setForm(prev => ({ ...prev, flavor: e.target.value })))
-            }
-          />
-        </FormGroup>
-        <br />
-        <FormGroup>
-          <Button
-            type="submit"
-            intent={Intent.PRIMARY}
-            large={true}
-          >
-            Make Coffee
+          Make Coffee
         </Button>
-        </FormGroup>
       </form>
       <br />
       {
@@ -173,7 +168,8 @@ const MakeCoffee = () => {
             {state.context.message ? state.context.message : ''}
           </p>
       }
-      <p>FSM: {state.matches('success') ? 'SUCCESS' : state.value.toUpperCase()}</p>
+      <p>finite state machine's state: {state.matches('success') ? 'SUCCESS' : state.value.toUpperCase()}</p>
+      <p>coffee:[ {form.cupSize}, {form.creamer}, {form.sugar}, {form.flavor} ]</p>
     </div >
   );
 }
