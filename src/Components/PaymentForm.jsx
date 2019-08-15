@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { FormGroup, InputGroup, Button, Intent } from "@blueprintjs/core";
 import { useMachine } from "@xstate/react";
 import { Machine, assign } from "xstate";
@@ -6,7 +6,7 @@ import { Machine, assign } from "xstate";
 const machine = Machine({
   id: "paymentForm",
   context: {
-    message: ''
+    message: ""
   },
   initial: "idle",
   states: {
@@ -15,9 +15,7 @@ const machine = Machine({
         SUBMIT: [
           {
             target: "loading",
-            cond: (context, event) => (
-              event.data.name && event.data.card
-            )
+            cond: (context, event) => event.data.name && event.data.card
           },
           {
             target: "failure"
@@ -28,53 +26,53 @@ const machine = Machine({
     loading: {
       invoke: {
         id: "doPayment",
-        src: () => {
-          return paymentGateway();
-        },
+        src: (context, event) =>
+          paymentGateway(event.data.name, event.data.card),
         onDone: {
-          target: 'success',
-          actions: assign({ message: (context, event) => (event.data) })
+          target: "success",
+          // set Context.message
+          actions: assign({ message: (context, event) => event.data })
         },
         onError: {
-          target: 'failure',
-          actions: assign({ message: (context, event) => (event.data) })
+          target: "failure",
+          // set Context.message
+          actions: assign({ message: (context, event) => event.data })
         }
       }
     },
     success: {
-      type: 'finish'
+      type: "finish"
     },
     failure: {
       on: {
         SUBMIT: {
           target: "loading",
-          cond: (context, event) => (
-            event.data.name && event.data.card
-          )
+          cond: (context, event) => event.data.name && event.data.card
         }
       }
     }
   }
 });
 
-function paymentGateway() {
+function paymentGateway(name, card) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (Math.random() > 0.6) {
-        resolve('Payment was RECEIVED at Payment Gateway');
-      }
-      else {
-        reject('Payment was REJECTED! Try again...');
+      if (Math.random() > 0.5) {
+        resolve(
+          "Payment was RECEIVED at Payment Gateway. " + name + ", " + card
+        );
+      } else {
+        reject("Payment was REJECTED! Try again... " + name + ", " + card);
       }
     }, 3000);
   });
-};
+}
 
 const PaymentForm = () => {
   const [state, send] = useMachine(machine);
   const [form, setForm] = useState({
-    name: '',
-    card: ''
+    name: "",
+    card: ""
   });
 
   useEffect(() => {
@@ -106,10 +104,10 @@ const PaymentForm = () => {
   //   // eslint-disable-next-line
   // }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     send({
-      type: 'SUBMIT',
+      type: "SUBMIT",
       data: { ...form }
     });
     // service.send({
@@ -120,13 +118,20 @@ const PaymentForm = () => {
     //   name: '',
     //   card: ''
     // });
-  }
+  };
 
   return (
-    <div style={{ marginLeft: '150px', marginRight: '150px', marginTop: '0px', marginBottom: '50px' }}>
-      <form onSubmit={handleSubmit} >
+    <div
+      style={{
+        marginLeft: "150px",
+        marginRight: "150px",
+        marginTop: "0px",
+        marginBottom: "50px"
+      }}
+    >
+      <form onSubmit={handleSubmit}>
         <h1 className="bp3-heading">Payment Form</h1>
-        <p >(xState)</p>
+        <p>(xState)</p>
         <FormGroup
           helperText=""
           label="Name on card"
@@ -139,9 +144,7 @@ const PaymentForm = () => {
             id="name"
             placeholder="Name on card"
             value={form.name}
-            onChange={
-              e => (setForm(prev => ({ ...prev, name: e.target.value })))
-            }
+            onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
           />
         </FormGroup>
         <FormGroup
@@ -156,37 +159,35 @@ const PaymentForm = () => {
             id="card"
             placeholder="Card number"
             value={form.card}
-            onChange={
-              e => (setForm(prev => ({ ...prev, card: e.target.value })))
-            }
+            onChange={e => setForm(prev => ({ ...prev, card: e.target.value }))}
           />
-
         </FormGroup>
         <br />
         <FormGroup>
-          <Button
-            type="submit"
-            intent={Intent.PRIMARY}
-            large={true}
-          >
+          <Button type="submit" intent={Intent.PRIMARY} large={true}>
             Submit Payment
-        </Button>
+          </Button>
         </FormGroup>
       </form>
       <br />
-      {state.matches('failure') ?
-        <p style={{ color: '#C23030' }}>
-          {state.context.message ? state.context.message : ''}
+      {state.matches("failure") ? (
+        <p style={{ color: "#C23030" }}>
+          {state.context.message ? state.context.message : ""}
         </p>
-        :
-        <p style={{ color: '#15B371' }}>
-          {state.context.message ? state.context.message : ''}
+      ) : (
+        <p style={{ color: "#15B371" }}>
+          {state.context.message ? state.context.message : ""}
         </p>
-      }
-      <p>finite state machine's state: {state.matches('success') ? 'SUCCESS' : state.value.toUpperCase()}</p>
-      <p>payment: [ {form.name}, {form.card} ]</p>
+      )}
+      <p>
+        finite state machine's state:{" "}
+        {state.matches("success") ? "SUCCESS" : state.value.toUpperCase()}
+      </p>
+      <p>
+        payment: [ {form.name}, {form.card} ]
+      </p>
     </div>
   );
-}
+};
 
 export default PaymentForm;
